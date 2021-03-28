@@ -14,7 +14,7 @@ const evnVariable = process.env.NODE_ENV || 'development';
       load: [configuration],
     }),
     // TypeOrm
-    TypeOrmModule.forRoot(ormConfig()),
+    // TypeOrmModule.forRoot(ormConfig()),
   ],
   controllers: [],
   providers: [],
