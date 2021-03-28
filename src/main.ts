@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as winston from 'winston';
@@ -12,6 +13,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new AllExceptionsFilterLogger(logger));
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  const port = configService.get('port');
+  await app.listen(port);
 }
 bootstrap();
