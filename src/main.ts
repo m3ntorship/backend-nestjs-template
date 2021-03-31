@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import * as winston from 'winston';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import * as csurf from 'csurf';
 import compression from 'compression';
 import session from 'cookie-session';
 import * as swaggerUi from 'swagger-ui-express';
@@ -31,6 +32,9 @@ async function bootstrap() {
 
   // Compression
   app.use(compression());
+
+  // CSRF Protection
+  app.use(csurf());
 
   // cookie-session
   app.use(
