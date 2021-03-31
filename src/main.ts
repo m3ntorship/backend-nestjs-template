@@ -15,6 +15,9 @@ import * as swaggerDocument from '../post.openAPI.json';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable cors
+  app.enableCors();
+
   // Helmet
   app.use(helmet());
 
