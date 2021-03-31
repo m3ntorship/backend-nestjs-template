@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import * as winston from 'winston';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import compression from 'compression';
 import * as swaggerUi from 'swagger-ui-express';
 import { AppModule } from './app.module';
 import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
@@ -20,6 +21,8 @@ async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMs
     }),
   );
+
+  app.use(compression());
   const logger = winston.createLogger(winstonLoggerOptions);
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new AllExceptionsFilterLogger(logger));
