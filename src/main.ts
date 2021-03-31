@@ -4,6 +4,7 @@ import * as winston from 'winston';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as csurf from 'csurf';
+import * as cookieParser from 'cookie-parser';
 import compression from 'compression';
 import session from 'cookie-session';
 import * as swaggerUi from 'swagger-ui-express';
@@ -32,6 +33,9 @@ async function bootstrap() {
 
   // Compression
   app.use(compression());
+
+  // Cookie parser
+  app.use(cookieParser());
 
   // CSRF Protection
   app.use(csurf());
