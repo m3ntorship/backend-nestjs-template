@@ -5,8 +5,8 @@ import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
-import compression from 'compression';
-import session from 'cookie-session';
+import * as compression from 'compression';
+// import * as session from 'cookie-session';
 import * as swaggerUi from 'swagger-ui-express';
 import { AppModule } from './app.module';
 import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
@@ -38,25 +38,28 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CSRF Protection
-  app.use(csurf());
+  app.use(csurf({ cookie: true }));
 
   // cookie-session
-  app.use(
-    session({
-      name: 'session',
-      keys: ['key1', 'key2'],
-      secure: true,
-      httpOnly: true,
-      domain: 'example.com',
-      path: 'foo/bar',
-      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour,
-    }),
-  );
+  // app.use(
+  //   session({
+  //     name: 'session',
+  //     keys: ['key1', 'key2'],
+  //     secure: true,
+  //     httpOnly: true,
+  //     domain: 'example.com',
+  //     path: 'foo/bar',
+  //     expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour,
+  //   }),
+  // );
   const logger = winston.createLogger(winstonLoggerOptions);
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new AllExceptionsFilterLogger(logger));
 
-  app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/health', (req: any, res: any, next: any) => {
+    res.send({ status: true });
+  });
+  app.use('/open-api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   const configService = app.get(ConfigService);
   const port = configService.get('port');
