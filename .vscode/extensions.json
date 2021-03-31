@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "42crunch.vscode-openapi",
+    "arjun.swagger-viewer",
+    "jebbs.plantuml",
+    "mikestead.dotenv",
+    "ckolkman.vscode-postgres"
+  ]
+}
