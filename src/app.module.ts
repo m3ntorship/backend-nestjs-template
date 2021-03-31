@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 import ormConfig from './ormconfig';
 
@@ -13,6 +14,7 @@ const evnVariable = process.env.NODE_ENV || 'development';
       isGlobal: true,
       load: [configuration],
     }),
+    AuthModule,
     // TypeOrm
     // TypeOrmModule.forRoot(ormConfig()),
   ],
