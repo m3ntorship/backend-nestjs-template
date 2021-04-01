@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule } from './clients/clients.module';
+import { ServiceModule } from './service/service.module';
 import configuration from './config/configuration';
-import ormConfig from './ormconfig';
+// import ormConfig from './ormconfig';
 
 const evnVariable = process.env.NODE_ENV || 'development';
 @Module({
@@ -17,6 +18,7 @@ const evnVariable = process.env.NODE_ENV || 'development';
     ClientsModule,
     // TypeOrm
     // TypeOrmModule.forRoot(ormConfig()),
+    ServiceModule,
   ],
   controllers: [],
   providers: [],
