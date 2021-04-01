@@ -19,16 +19,16 @@ export default () => ({
   },
   clients: {
     posts: {
-      baseURL: '',
+      baseURL: 'http://localhost:3000',
     },
     notifications: {
-      baseURL: '',
+      baseURL: 'http://localhost:3001',
     },
     upload: {
-      baseURL: '',
+      baseURL: 'http://localhost:3002',
     },
     media: {
-      baseURL: '',
+      baseURL: 'http://localhost:3003',
     },
   },
 });

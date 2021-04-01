@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import axios from 'axios';
+import interceptors from './interceptors/interceptors';
 
 @Module({
   imports: [],
@@ -9,6 +10,10 @@ import axios from 'axios';
     {
       provide: 'axios',
       useValue: axios,
+    },
+    {
+      provide: 'interceptors',
+      useValue: interceptors,
     },
   ],
   exports: [ClientsService],
