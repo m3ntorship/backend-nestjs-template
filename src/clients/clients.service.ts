@@ -9,39 +9,13 @@ import { AxiosStatic } from 'axios';
 @Injectable()
 export class ClientsService {
   constructor(
-    private configService: ConfigService,
-    @Inject('axios') private axios: AxiosStatic,
-    @Inject('interceptors') private interceptors: any,
-  ) {
-    //global request interceptor
-    this.axios.interceptors.request.use(
-      (config) => {
-        config.headers['x-foo-bar-global'] = 'xyz';
-        return config;
-      },
-      (error) => {
-        // just an example
-        console.log(error);
-        throw InternalServerErrorException;
-      },
-    );
+    private readonly configService: ConfigService,
+    @Inject('axios') private readonly axios: AxiosStatic,
+    @Inject('interceptors') private readonly interceptors: any,
+  ) {}
+  private readonly clientsConfig = this.configService.get('clients');
 
-    //global response interceptor
-    this.axios.interceptors.response.use(
-      (res) => {
-        res.data = 'xyz-global';
-        return res;
-      },
-      (error) => {
-        // just an example
-        console.log(error);
-        throw InternalServerErrorException;
-      },
-    );
-  }
-  private clientsConfig = this.configService.get('clients');
-
-  private clients = {
+  private readonly clients = {
     postsClient: this.axios.create({
       baseURL: this.clientsConfig.posts.baseURL,
     }),
@@ -60,8 +34,9 @@ export class ClientsService {
   };
 
   postsAPI = {
-    foo: () => {
+    foo: async () => {
       this.interceptors.addHeader(this.clients.postsClient);
+      // this.interceptors.changeData(this.clients.postsClient);
       return this.clients.postsClient.get('/bar');
     },
   };

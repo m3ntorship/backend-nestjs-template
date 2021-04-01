@@ -19,10 +19,10 @@ export default () => ({
   },
   clients: {
     posts: {
-      baseURL: 'http://localhost:3000',
+      baseURL: 'http://localhost:3002',
     },
     notifications: {
-      baseURL: 'http://localhost:3001',
+      baseURL: 'http://localhost:3004',
     },
     upload: {
       baseURL: 'http://localhost:3002',
