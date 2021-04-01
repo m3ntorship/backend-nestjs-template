@@ -7,11 +7,7 @@ export class ClientsService {
   constructor(
     private configService: ConfigService,
     @Inject('axios') private axios: AxiosStatic,
-  ) {
-    this.clients.postsClient.interceptors.request.use((config) => ({
-      headers: { 'x-custom-header': 'header' },
-    }));
-  }
+  ) {}
   private clientsConfig = this.configService.get('clients');
   private clients = {
     postsClient: this.axios.create({

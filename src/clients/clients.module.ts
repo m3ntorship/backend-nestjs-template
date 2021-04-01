@@ -1,9 +1,9 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import axios from 'axios';
 
 @Module({
-  imports: [HttpModule],
+  imports: [],
   providers: [
     ClientsService,
     {
