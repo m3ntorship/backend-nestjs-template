@@ -1,37 +1,38 @@
-import { HttpService, Injectable } from '@nestjs/common';
-import axios from 'axios';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { AxiosStatic } from 'axios';
 
 @Injectable()
 export class ClientsService {
-  constructor(private httpService: HttpService) {}
-  clients = {
-    postsClient: axios.create({
-      baseURL: '', // config
+  constructor(
+    private configService: ConfigService,
+    @Inject('axios') private axios: AxiosStatic,
+  ) {
+    this.clients.postsClient.interceptors.request.use((config) => ({
+      headers: { 'x-custom-header': 'header' },
+    }));
+  }
+  private clientsConfig = this.configService.get('clients');
+  private clients = {
+    postsClient: this.axios.create({
+      baseURL: this.clientsConfig.posts.baseURL,
     }),
-    notificationsClient: axios.create({
-      baseURL: '', // config
+    notificationsClient: this.axios.create({
+      baseURL: this.clientsConfig.notifications.baseURL,
     }),
-    uploadClient: axios.create({
-      baseURL: '', // config
+    uploadClient: this.axios.create({
+      baseURL: this.clientsConfig.upload.baseURL,
     }),
-    mediaClient: axios.create({
-      baseURL: '', // config
+    mediaClient: this.axios.create({
+      baseURL: this.clientsConfig.media.baseURL,
     }),
   };
+
   postsAPI = {
-    // Example
-    getPosts: (authorization: string) => {
+    // Example - get
+    get: (authorization: string) => {
       return this.clients.postsClient.get('/posts', {
-        headers: {
-          authorization,
-        },
-      });
-    },
-  };
-  notificationsAPI = {
-    // Example
-    getNotifications: (authorization: string) => {
-      return this.clients.notificationsClient.get('/notifications', {
+        // Should research later on how do this in interceptor
         headers: {
           authorization,
         },
@@ -39,13 +40,17 @@ export class ClientsService {
     },
   };
   uploadAPI = {
-    // Example
-    uploadFile: (authorization: string) => {
-      return this.clients.uploadClient.post('/files', {
-        headers: {
-          authorization,
+    // Example - post
+    post: (authorization: string) => {
+      return this.clients.uploadClient.post(
+        '/files',
+        {},
+        {
+          headers: {
+            authorization,
+          },
         },
-      });
+      );
     },
   };
 }

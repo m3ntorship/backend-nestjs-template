@@ -11,8 +11,24 @@ export default () => ({
     entities: process.env.DB_ENTITIES,
     migrations: process.env.DB_MIGRATIONS,
     subscribers: process.env.DB_SUBSCRIBERS,
-    cliEntityDir: process.env.DB_CLI_ENT_DIR,
-    cliMigrationDir: process.env.DB_CLI_MIGRATION_DIR,
-    cliSubscriberDir: process.env.DB_CLI_SUBSCRIBERS_DIR,
+    cli: {
+      entityDir: process.env.DB_CLI_ENT_DIR,
+      migrationDir: process.env.DB_CLI_MIGRATION_DIR,
+      subscriberDir: process.env.DB_CLI_SUBSCRIBERS_DIR,
+    },
+  },
+  clients: {
+    posts: {
+      baseURL: '',
+    },
+    notifications: {
+      baseURL: '',
+    },
+    upload: {
+      baseURL: '',
+    },
+    media: {
+      baseURL: '',
+    },
   },
 });
