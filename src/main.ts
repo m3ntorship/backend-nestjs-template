@@ -59,7 +59,8 @@ async function bootstrap() {
   app.use('/health', (req: any, res: any, next: any) => {
     res.send({ status: true });
   });
-  app.use('/open-api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   const configService = app.get(ConfigService);
   const port = configService.get('port');
