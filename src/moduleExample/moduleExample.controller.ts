@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ServiceService } from './moduleExample.service';
+import { ModuleexampleService } from './moduleExample.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { CounterMetric, PromCounter } from '@digikare/nestjs-prom';
 @Controller('service')
-export class ServiceController {
-  constructor(private readonly serviceService: ServiceService) {}
+export class ModuleExampleContoller {
+  constructor(private readonly moduleexampleService: ModuleexampleService) {}
 
   @Post()
   create(
@@ -12,11 +12,11 @@ export class ServiceController {
     @PromCounter('tessssssssssst') counter: CounterMetric,
   ) {
     counter.inc();
-    return this.serviceService.create(CreateServiceDto);
+    return this.moduleexampleService.create(CreateServiceDto);
   }
 
   @Get()
   findAll() {
-    return this.serviceService.findAll();
+    return this.moduleexampleService.findAll();
   }
 }

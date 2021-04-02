@@ -1,20 +1,38 @@
+import { PromModule } from '@digikare/nestjs-prom';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ServiceController } from './moduleExample.controller';
-import { ServiceService } from './moduleExample.service';
+import { ModuleExampleContoller } from './moduleExample.controller';
+import { ModuleexampleService } from './moduleExample.service';
 
 describe('ServiceController', () => {
-  let controller: ServiceController;
+  let controller: ModuleExampleContoller;
+  let service: ModuleexampleService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ServiceController],
-      providers: [ServiceService],
+    const moduleRef: TestingModule = await Test.createTestingModule({
+      imports: [
+        PromModule.forRoot({
+          withHttpMiddleware: {
+            enable: true,
+          },
+        }),
+      ],
+      controllers: [ModuleExampleContoller],
+      providers: [ModuleexampleService],
     }).compile();
 
-    controller = module.get<ServiceController>(ServiceController);
+    controller = moduleRef.get<ModuleExampleContoller>(ModuleExampleContoller);
+    service = moduleRef.get<ModuleexampleService>(ModuleexampleService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('findAll', () => {
+    it('should return an array of cats', async () => {
+      const result = 'test';
+      // const mock = jest.fn(() => result);
+
+      jest.spyOn(controller, 'findAll').mockImplementation(() => result);
+
+      expect(controller.findAll()).toBe(result);
+      // expect(controller.findAll()).toHaveReturned();
+    });
   });
 });
