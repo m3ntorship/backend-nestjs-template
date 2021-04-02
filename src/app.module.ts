@@ -6,6 +6,7 @@ import { ServiceModule } from './moduleExample/moduleExample.module';
 import configuration from './config/configuration';
 // import ormConfig from './ormconfig';
 
+
 const evnVariable = process.env.NODE_ENV || 'development';
 @Module({
   imports: [
