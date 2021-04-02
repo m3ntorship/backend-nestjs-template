@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { PromModule } from '@digikare/nestjs-prom';
 import { ConfigModule } from '@nestjs/config';
 // import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClientsModule } from './clients/clients.module';
-import { ServiceModule } from './service/service.module';
+import { ServiceModule } from './moduleExample/moduleExample.module';
 import configuration from './config/configuration';
 // import ormConfig from './ormconfig';
 
@@ -15,7 +15,11 @@ const evnVariable = process.env.NODE_ENV || 'development';
       isGlobal: true,
       load: [configuration],
     }),
-    ClientsModule,
+    PromModule.forRoot({
+      withHttpMiddleware: {
+        enable: true,
+      },
+    }),
     // TypeOrm
     // TypeOrmModule.forRoot(ormConfig()),
     ServiceModule,

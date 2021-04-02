@@ -5,8 +5,8 @@ import Model from '../../shared/entity.model';
 @Entity('posts')
 export class Service extends Model {
   @Column()
-  title: string;
+  col1: string;
 
   @Column()
-  body: string;
+  col2: string;
 }

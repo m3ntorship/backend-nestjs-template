@@ -38,7 +38,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // CSRF Protection
-  app.use(csurf({ cookie: true }));
+  // app.use(csurf({ cookie: true }));
 
   // cookie-session
   // app.use(
