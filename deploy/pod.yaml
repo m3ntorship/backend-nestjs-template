@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  pickly
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pickly-posts
+  namespace: pickly
+  labels:
+    application: pickly-posts
+spec:
+  containers:
+    - name: pickly-posts
+      image: m3ntorshipci/pickly:04
+      command: ["node"]
+      args: ["dist/src/main.js"]
+      env:
+        - name: APP_NAME
+          value: "pickly-posts"
+        - name: POSTS_URL
+          value: http://pickly-posts.pickly
+        - name: NOTIFICATIONS_URL
+          value: http://pickly-notifications.pickly
+        - name: VOTES_URL
+          value: http://pickly-votes.pickly
+      ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pickly-notifications
+  namespace: pickly
+  labels:
+    application: pickly-notifications
+spec:
+  containers:
+    - name: pickly-notifications
+      image: m3ntorshipci/pickly:04
+      command: ["node"]
+      args: ["dist/src/main.js"]
+      env:
+        - name: APP_NAME
+          value: "pickly-notifications"
+        - name: POSTS_URL
+          value: http://pickly-posts.pickly
+        - name: NOTIFICATIONS_URL
+          value: http://pickly-notifications.pickly
+        - name: VOTES_URL
+          value: http://pickly-votes.pickly
+      ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pickly-notifications2
+  namespace: pickly
+  labels:
+    application: pickly-notifications
+spec:
+  containers:
+    - name: pickly-notifications
+      image: m3ntorshipci/pickly:04
+      command: ["node"]
+      args: ["dist/src/main.js"]
+      env:
+        - name: APP_NAME
+          value: "pickly-notifications"
+        - name: POSTS_URL
+          value: http://pickly-posts.pickly
+        - name: NOTIFICATIONS_URL
+          value: http://pickly-notifications.pickly
+        - name: VOTES_URL
+          value: http://pickly-votes.pickly
+      ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pickly-votes
+  namespace: pickly
+  labels:
+    application: pickly-votes
+spec:
+  containers:
+    - name: pickly-votes
+      image: m3ntorshipci/pickly:04
+      command: ["node"]
+      args: ["dist/src/main.js"]
+      env:
+        - name: APP_NAME
+          value: "pickly-votes"
+        - name: POSTS_URL
+          value: http://pickly-posts.pickly
+        - name: NOTIFICATIONS_URL
+          value: http://pickly-notifications.pickly
+        - name: VOTES_URL
+          value: http://pickly-votes.pickly
+      ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP

@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pickly-posts
+  namespace: pickly
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+spec:
+  rules:
+  - host: "posts.pickly.io"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pickly-posts
+            port:
+              number: 80
+  - host: "notifications.pickly.io"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pickly-notifications
+            port:
+              number: 80
+  - host: "votes.pickly.io"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pickly-votes
+            port:
+              number: 80

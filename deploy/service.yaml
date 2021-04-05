@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pickly-posts
+  namespace: pickly
+spec:
+  selector:
+    application: pickly-posts
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pickly-notifications
+  namespace: pickly
+spec:
+  selector:
+    application: pickly-notifications
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pickly-votes
+  namespace: pickly
+spec:
+  selector:
+    application: pickly-votes
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: 3000

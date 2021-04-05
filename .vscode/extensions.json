@@ -5,6 +5,7 @@
     "arjun.swagger-viewer",
     "jebbs.plantuml",
     "mikestead.dotenv",
-    "ckolkman.vscode-postgres"
+    "ckolkman.vscode-postgres",
+    "firsttris.vscode-jest-runner"
   ]
 }

@@ -1,5 +1,8 @@
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
+  app: {
+    name: process.env.APP_NAME || 'anonymous',
+  },
   database: {
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -19,16 +22,19 @@ export default () => ({
   },
   clients: {
     posts: {
-      baseURL: 'http://localhost:3002',
+      baseURL: process.env.POSTS_URL,
     },
     notifications: {
-      baseURL: 'http://localhost:3004',
+      baseURL: process.env.NOTIFICATIONS_URL,
     },
     upload: {
-      baseURL: 'http://localhost:3002',
+      baseURL: process.env.UPLOAD_URL,
     },
     media: {
-      baseURL: 'http://localhost:3003',
+      baseURL: process.env.MEDIA_URL,
+    },
+    votes: {
+      baseURL: process.env.VOTES_URL,
     },
   },
 });

@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import * as winston from 'winston';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 // import * as session from 'cookie-session';
@@ -13,6 +12,9 @@ import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filt
 import { winstonLoggerOptions } from './logging/winston.options';
 import { LoggingInterceptor } from './logging/logging.interceptor';
 import * as swaggerDocument from '../post.openAPI.json';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
+import { ClientsService } from './clients/clients.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -37,9 +39,6 @@ async function bootstrap() {
   // Cookie parser
   app.use(cookieParser());
 
-  // CSRF Protection
-  // app.use(csurf({ cookie: true }));
-
   // cookie-session
   // app.use(
   //   session({
@@ -56,11 +55,33 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new AllExceptionsFilterLogger(logger));
 
+  const clientService = app.get<ClientsService>(ClientsService);
+
   app.use('/health', (req: any, res: any, next: any) => {
-    res.send({ status: true });
+    const now = Date.now();
+    writeFileSync(
+      join(__dirname, '..', '..', 'stats', `${now}.txt`),
+      new Date().toISOString(),
+    );
+    res.send({ status: configService.get('app.name') });
   });
 
-  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/deep-health', async (req: any, res: any, next: any) => {
+    const { data: postsHealth } = await clientService.postsAPI.health();
+    const {
+      data: notificationsHealth,
+    } = await clientService.notificationsAPI.health();
+    const { data: votesHealth } = await clientService.votesAPI.health();
+
+    const now = Date.now();
+    writeFileSync(
+      join(__dirname, '..', '..', 'stats', `${now}.txt`),
+      new Date().toISOString(),
+    );
+    res.send({ postsHealth, notificationsHealth, votesHealth });
+  });
+
+  app.use(['/', '/api'], swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   const configService = app.get(ConfigService);
   const port = configService.get('port');

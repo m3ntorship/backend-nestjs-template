@@ -14,6 +14,9 @@ export class ClientsService {
     notificationsClient: this.axios.create({
       baseURL: this.clientsConfig.notifications.baseURL,
     }),
+    votesClient: this.axios.create({
+      baseURL: this.clientsConfig.votes.baseURL,
+    }),
 
     uploadClient: this.axios.create({
       baseURL: this.clientsConfig.upload.baseURL,
@@ -31,18 +34,32 @@ export class ClientsService {
   ) {
     this.interceptors.addHeader(this.clients.postsClient);
     this.interceptors.addHeader(this.clients.uploadClient);
-    this.interceptors.changeData(this.clients.postsClient);
   }
 
   postsAPI = {
     foo: async () => {
       return this.clients.postsClient.get('/bar');
     },
+    health: async () => {
+      return this.clients.postsClient.get('/health');
+    },
   };
 
   uploadAPI = {
     foo: () => {
       return this.clients.uploadClient.post('/bar', { foo: 'bar' });
+    },
+  };
+
+  votesAPI = {
+    health: () => {
+      return this.clients.votesClient.get('/health');
+    },
+  };
+
+  notificationsAPI = {
+    health: () => {
+      return this.clients.notificationsClient.get('/health');
     },
   };
 
