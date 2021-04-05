@@ -7,26 +7,28 @@ on:
 env:
   BALA7A: pickly-workshop
 jobs: 
-  sayHi:
+
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.prepare.outputs.sha }}
+      version: ${{ steps.prepare.outputs.version }}
+      image: m3ntorshipci/pickly
+      dockerfile: Dockerfile
+    steps:
+    - uses: actions/checkout@v2
+    - id: prepare
+      run: |
+        echo "::set-output name=sha::$(git rev-parse HEAD)"
+        echo "::set-output name=version::$(git rev-parse --short=4 HEAD)"
+  ensure:
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hi from sayHi job first step of $BALA7A"
-      - run: echo "hi from sayHi job second step of $BALA7A"
-
-  # prepare:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     sha: ${{ steps.prepare.outputs.sha }}
-  #     version: ${{ steps.prepare.outputs.version }}
-  #     # version: develop
-  #     image_frontend: m3ntorshipci/m3ntorshipcom-frontend
-  #     image_backend: m3ntorshipci/m3ntorshipcom-backend
-  #     dockerfile_frontend: Dockerfile.m3ntorship-dev.frontend
-  #     dockerfile_backend: Dockerfile.m3ntorship-dev.backend
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - id: prepare
-  #     run: |
-  #       echo "::set-output name=sha::$(git rev-parse HEAD)"
-  #       echo "::set-output name=version::$(git rev-parse --short=4 HEAD)"
+      - id: sha
+        name: sha
+        run: echo "sha ${{needs.prepare.outputs.sha}}"
+      - run: echo "version ${{needs.prepare.outputs.version}}"
+      - run: echo "image ${{needs.prepare.outputs.image}}"
+      - run: echo "dockerfile ${{needs.prepare.outputs.dockerfile}}"
   
