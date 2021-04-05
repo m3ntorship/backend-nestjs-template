@@ -29,7 +29,8 @@ jobs:
       - run: echo "version ${{needs.prepare.outputs.version}}"
       - run: echo "image ${{needs.prepare.outputs.image}}"
       - run: echo "dockerfile ${{needs.prepare.outputs.dockerfile}}"
-  run-unit-tests:
+  build-app:
+    needs: [prepare]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,3 +40,15 @@ jobs:
 
       - id: run-unit-tests
         run: yarn test
+
+      - id: build-app
+        run: yarn build
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{needs.prepare.outputs.image}}
+          dockerfile: ${{needs.prepare.outputs.dockerfile}}
+          tags: ${{needs.prepare.outputs.version}}
