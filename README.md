@@ -1,73 +1,114 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+## Getting Started
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
 ```
+# 1. Clone the repository.
+git clone https://github.com/m3ntorship/backend-nestjs-template.git my-new-project
 
-## Running the app
+# You can also use "Use this template" button to create new repository from this remplate.
 
-```bash
-# development
-$ npm run start
+# 2. If you decided to clone, enter your folder.
+cd my-new-project
 
-# watch mode
-$ npm run start:dev
+# 3. Install yarn: https://yarnpkg.com/lang/en/docs/install.
 
-# production mode
-$ npm run start:prod
+# 4. Install dependencies.
+yarn
+
+# 5. Run development server and open http://localhost:3000
+yarn start:dev
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn test:cov
 ```
 
-## Support
+## Debug
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Use vscode integrated debug mode to run the following commands in debug mode:
 
-## Stay in touch
+```bash
+- yarn start:dev
+- yarn start
+- yarn start:prod
+- yarn test
+- yarn test:e2e
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Configurations
 
-## License
+We use Postgresql, you can install it here: https://www.postgresql.org/download/.<br/>
+If you are comfortable with Docker, skip to [Docker](#Docker) section and use Postgresql image.
 
-Nest is [MIT licensed](LICENSE).
+### Necessary Environment Variables
+
+- If you are using local Postgresql server, fill `.development.env` file with the following configurations:
+
+```
+DB_HOST = localhost
+DB_PORT = 5432
+DB_USERNAME = postgres
+DB_PASSWORD = postgres
+DB_DATABASE = postgresql_database
+DB_ENTITIES =  ["dist/**/*.entity.{ts,js}"]
+```
+
+- Also, add other services URL's
+
+```
+POSTS_SERVICE_URL = http://localhost:3000
+UPLOAD_SERVICE_URL = http://localhost:3001
+.
+.
+.
+```
+
+## Docker
+
+- You need to install docker and docker-compose to start the database
+
+- Open terminal and navigate to project directory and run the following command.
+
+  ```bash
+    $ docker run -d --name pg --network host \
+    -v /home/"$(pwd)"/docker_pg_data:/var/lib/postgresql/data \
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -e POSTGRES_PASSWORD=postgres \
+    postgres
+  ```
+
+- Now the database is ready to be used using:
+  ```bash
+  port = 5432
+  host = localhost
+  username = postgres
+  database = postgres
+  password = 12345
+  ```
+
+## Template Components
+
+- Logging
+  - Request Logger
+  - Exception Logger
+- Tests
+- Configuration
+- Modules
+  - [Clients Module](#Clients-Module)
+  - [Example Module](#Example-Module)
+
+### Clients Module:
+
+- Module for all other services API endpoints.
+
+### Example Module
+
+- A typical module to be replaced with the actual module(s). It includes database implementation.
