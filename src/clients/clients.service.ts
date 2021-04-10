@@ -11,14 +11,6 @@ export class ClientsService {
       baseURL: this.clientsConfig.posts.baseURL,
     }),
 
-    notificationsClient: this.axios.create({
-      baseURL: this.clientsConfig.notifications.baseURL,
-    }),
-
-    uploadClient: this.axios.create({
-      baseURL: this.clientsConfig.upload.baseURL,
-    }),
-
     mediaClient: this.axios.create({
       baseURL: this.clientsConfig.media.baseURL,
     }),
@@ -30,19 +22,12 @@ export class ClientsService {
     @Inject('interceptors') private readonly interceptors: any,
   ) {
     this.interceptors.addHeader(this.clients.postsClient);
-    this.interceptors.addHeader(this.clients.uploadClient);
     this.interceptors.changeData(this.clients.postsClient);
   }
 
   postsAPI = {
     foo: async () => {
       return this.clients.postsClient.get('/bar');
-    },
-  };
-
-  uploadAPI = {
-    foo: () => {
-      return this.clients.uploadClient.post('/bar', { foo: 'bar' });
     },
   };
 
