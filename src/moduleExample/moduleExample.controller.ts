@@ -7,12 +7,13 @@ export class ModuleExampleContoller {
   constructor(private readonly moduleexampleService: ModuleexampleService) {}
 
   @Post()
-  create(
-    @Body() CreateServiceDto: CreateServiceDto,
-    @PromCounter('tessssssssssst') counter: CounterMetric,
-  ) {
+  count(@PromCounter('tessssssssssst') counter: CounterMetric) {
     counter.inc();
-    return this.moduleexampleService.create(CreateServiceDto);
+  }
+  @Post()
+  create(@Body() CreateServiceDto: CreateServiceDto) {
+    const newDTO = { ...CreateServiceDto, firstName: CreateServiceDto.name };
+    return this.moduleexampleService.create(newDTO);
   }
 
   @Get()
