@@ -3,7 +3,7 @@ import { Entity, Column } from 'typeorm';
 import Model from '../../shared/entity.model';
 
 @Entity('posts')
-export class Service extends Model {
+export class ModuleExample extends Model {
   @Column()
   col1: string;
 

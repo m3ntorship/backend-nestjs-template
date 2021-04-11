@@ -3,14 +3,11 @@ import { ModuleexampleService } from './moduleExample.service';
 import { ModuleExampleContoller } from './moduleExample.controller';
 import { ClientsModule } from 'src/clients/clients.module';
 
-// import { TypeOrmModule } from '@nestjs/typeorm';
-// import { ServiceRepository  } from './entities/serviceRepository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ModuleExampleRepository } from './entities/moduleExampleRepository';
 
 @Module({
-  imports: [
-    ClientsModule,
-    // TypeOrmModule.forFeature([ServiceRepository]),
-  ],
+  imports: [ClientsModule, TypeOrmModule.forFeature([ModuleExampleRepository])],
   controllers: [ModuleExampleContoller],
   providers: [ModuleexampleService],
 })
