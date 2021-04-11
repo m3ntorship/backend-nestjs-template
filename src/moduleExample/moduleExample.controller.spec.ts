@@ -1,38 +1,43 @@
-import { PromModule } from '@digikare/nestjs-prom';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModuleExampleContoller } from './moduleExample.controller';
 import { ModuleexampleService } from './moduleExample.service';
 
-describe('ServiceController', () => {
+describe('ModuleExampleController', () => {
   let controller: ModuleExampleContoller;
-  let service: ModuleexampleService;
+  const service = {
+    findAll: jest.fn(() => 'test'),
+    create: jest.fn(() => 'Sahl'),
+  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        PromModule.forRoot({
-          withHttpMiddleware: {
-            enable: true,
-          },
-        }),
-      ],
+      imports: [],
       controllers: [ModuleExampleContoller],
       providers: [ModuleexampleService],
-    }).compile();
+    })
+      .overrideProvider(ModuleexampleService)
+      .useValue(service)
+      .compile();
 
     controller = moduleRef.get<ModuleExampleContoller>(ModuleExampleContoller);
-    service = moduleRef.get<ModuleexampleService>(ModuleexampleService);
   });
 
+  it('should have create & findAll methods', () => {
+    expect(controller).toHaveProperty('findAll');
+    expect(controller).toHaveProperty('create');
+  });
   describe('findAll', () => {
-    it('should return an array of cats', async () => {
-      const result = 'test';
-      // const mock = jest.fn(() => result);
+    it('should return the mocked service output', () => {
+      expect(controller.findAll()).toBe('test');
+    });
+  });
 
-      jest.spyOn(controller, 'findAll').mockImplementation(() => result);
-
-      expect(controller.findAll()).toBe(result);
-      // expect(controller.findAll()).toHaveReturned();
+  describe('create', () => {
+    it('should return a string created', () => {
+      const dto = { name: 'Sahl' };
+      const modifiedDto = { ...dto, firstName: 'Sahl' };
+      expect(controller.create(dto)).toBe('Sahl');
+      expect(service.create).toBeCalledWith(modifiedDto);
     });
   });
 });

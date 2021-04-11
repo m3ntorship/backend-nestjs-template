@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { PromModule } from '@digikare/nestjs-prom';
 import { ConfigModule } from '@nestjs/config';
 // import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServiceModule } from './moduleExample/moduleExample.module';
+import { ModuleExampleModule } from './moduleExample/moduleExample.module';
 import configuration from './config/configuration';
 // import ormConfig from './ormconfig';
-
 
 const evnVariable = process.env.NODE_ENV || 'development';
 @Module({
@@ -23,7 +22,7 @@ const evnVariable = process.env.NODE_ENV || 'development';
     }),
     // TypeOrm
     // TypeOrmModule.forRoot(ormConfig()),
-    ServiceModule,
+    ModuleExampleModule,
   ],
   controllers: [],
   providers: [],
