@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ModuleExampleModule } from './moduleExample/moduleExample.module';
 import configuration from './config/configuration';
-import { defaultOptions, postgressOptions } from './ormconfig';
+import config from './config/database';
 
 const evnVariable = process.env.NODE_ENV || 'development';
 @Module({
@@ -20,7 +20,7 @@ const evnVariable = process.env.NODE_ENV || 'development';
         enable: true,
       },
     }),
-    TypeOrmModule.forRoot(defaultOptions),
+    TypeOrmModule.forRoot(config),
     ModuleExampleModule,
   ],
   controllers: [],

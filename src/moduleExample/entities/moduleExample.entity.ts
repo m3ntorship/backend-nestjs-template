@@ -9,4 +9,7 @@ export class ModuleExample extends Model {
 
   @Column()
   col2: string;
+
+  // @Column()
+  // col3: string;
 }
