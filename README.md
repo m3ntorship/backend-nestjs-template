@@ -100,9 +100,6 @@ DB_ENTITIES = ["dist/**/*.entity.{ts,js}"]
 ```
 POSTS_SERVICE_URL = http://localhost:3000
 UPLOAD_SERVICE_URL = http://localhost:3001
-.
-.
-.
 ```
 
 ## Use Docker to start the application
