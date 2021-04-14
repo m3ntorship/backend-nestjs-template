@@ -8,4 +8,12 @@ services:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - /home/$PWD/docker_pg_data:/var/lib/postgresql/data
+      - /home/$USER/docker_pg_data:/var/lib/postgresql/data
+  app:
+    image: microservice-template:latest
+    container_name: microservice-template
+    network_mode: host
+    env_file:
+      - .development.env
+    volumes:
+      - /pickly-backend-template:$PWD/pickly-backend-template
