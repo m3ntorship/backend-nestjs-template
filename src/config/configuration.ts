@@ -2,16 +2,16 @@ export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   clients: {
     posts: {
-      baseURL: 'http://localhost:3002',
+      baseURL: process.env.POSTS_SERVICE_URL,
     },
     notifications: {
-      baseURL: 'http://localhost:3004',
+      baseURL: process.env.NOTIFICATIONS_SERVICE_URL,
     },
     upload: {
-      baseURL: 'http://localhost:3002',
+      baseURL: process.env.UPLOAD_SERVICE_URL,
     },
     media: {
-      baseURL: 'http://localhost:3003',
+      baseURL: process.env.MEDIA_SERVICE_URL,
     },
   },
 });
