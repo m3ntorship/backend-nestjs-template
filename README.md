@@ -74,12 +74,23 @@ If you are comfortable with Docker, skip to [Docker](#Docker) section and use Po
 - If you are using local Postgresql server, fill `.development.env` file with the following configurations:
 
 ```
+DB_HOST =
+DB_PORT =
+DB_USERNAME =
+DB_PASSWORD =
+DB_DATABASE =
+DB_ENTITIES =
+```
+
+If any of the preceding properties were not filled in `.development.env` file, the following values are made
+
+```
 DB_HOST = localhost
 DB_PORT = 5432
 DB_USERNAME = postgres
 DB_PASSWORD = postgres
 DB_DATABASE = postgresql_database
-DB_ENTITIES =  ["dist/**/*.entity.{ts,js}"]
+DB_ENTITIES = ["dist/**/*.entity.{ts,js}"]
 ```
 
 ### Services URL's
@@ -98,15 +109,12 @@ UPLOAD_SERVICE_URL = http://localhost:3001
 
 - You need to [install docker](#docker-&-docker-compose-setup) and docker-compose to start the database
 
-- Open terminal and navigate to project directory and run the following command.
+- Open terminal and navigate to project directory and run the following command
 
-  ```bash
-    $ docker run -d --name pg --network host \
-    -v /home/"$(pwd)"/docker_pg_data:/var/lib/postgresql/data \
-    -e PGDATA=/var/lib/postgresql/data/pgdata \
-    -e POSTGRES_PASSWORD=postgres \
-    postgres
-  ```
+  - `$ yarn`
+  - `$ yarn build`
+  - `$ docker build microservice-template .`
+  - `$ docker-compose up -d`
 
 - Now the database is ready to be used using:
   ```bash
@@ -114,7 +122,7 @@ UPLOAD_SERVICE_URL = http://localhost:3001
   host = localhost
   username = postgres
   database = postgres
-  password = 12345
+  password = postgres
   ```
 
 ## Template Components
