@@ -12,6 +12,7 @@ services:
   app:
     image: microservice-template:latest
     container_name: microservice-template
+    network_mode: host
     env_file:
       - .development.env
     volumes:
