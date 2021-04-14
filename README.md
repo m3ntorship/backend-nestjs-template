@@ -113,7 +113,7 @@ UPLOAD_SERVICE_URL = http://localhost:3001
 
   - `$ yarn`
   - `$ yarn build`
-  - `$ docker build microservice-template .`
+  - `$ docker build -t microservice-template .`
   - `$ docker-compose up -d`
 
 - Now the database is ready to be used using:
