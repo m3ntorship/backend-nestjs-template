@@ -3,10 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import * as winston from 'winston';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-// import * as session from 'cookie-session';
 import * as swaggerUi from 'swagger-ui-express';
 import { AppModule } from './app.module';
 import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
@@ -37,21 +35,6 @@ async function bootstrap() {
   // Cookie parser
   app.use(cookieParser());
 
-  // CSRF Protection
-  // app.use(csurf({ cookie: true }));
-
-  // cookie-session
-  // app.use(
-  //   session({
-  //     name: 'session',
-  //     keys: ['key1', 'key2'],
-  //     secure: true,
-  //     httpOnly: true,
-  //     domain: 'example.com',
-  //     path: 'foo/bar',
-  //     expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour,
-  //   }),
-  // );
   const logger = winston.createLogger(winstonLoggerOptions);
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new AllExceptionsFilterLogger(logger));
