@@ -1,0 +1,22 @@
+@startuml
+hide footbox
+
+participant client
+participant mediaService
+participant uploadService
+participant singleProvider
+
+client -> mediaService : Upload request
+mediaService -> uploadService : Binary File
+uploadService -> singleProvider: Upload Request
+singleProvider -> uploadService: Data Response
+uploadService -> mediaService : URL
+
+' Q: Watermark to be added
+' Needed questions:
+' 1: Type of files
+' 2: Is the watermark my service or external service
+' 3: Is there just one provider for all files' type
+' 4: What type of manipulations I need to do before uploading the file
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+hide footbox
+
+participant client
+participant mediaService
+participant uploadService
+participant provider1
+participant provider2
+participant providerN
+
+client -> mediaService : Upload request
+mediaService -> uploadService : Manipulated Binary File
+uploadService -> provider1: Upload Request
+uploadService -> provider2: Upload Request
+uploadService -> providerN: Upload Request
+
+provider1 -> uploadService : Data Response
+provider2 -> uploadService : Data Response
+providerN -> uploadService : Data Response
+uploadService -> mediaService : Original URLs
+mediaService -> client : Masked URLs
+@enduml

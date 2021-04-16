@@ -1,0 +1,24 @@
+@startuml Notifications Scenario
+hide footbox
+
+actor user1 #red
+actor user2 #green
+participant postsService
+participant notificationService
+
+user1 -> postsService : Add vote 
+postsService -> postsService : Add the vote in database
+postsService -> user1 : success
+postsService -> notificationService : create notificationService
+
+newpage Request Notifications
+
+user2 -> notificationService : Request notifications
+notificationService -> user2 : notifications
+
+newpage Update Notifications
+
+user2 -> notificationService: Update notifications
+notificationService -> user2 : Success
+
+@enduml

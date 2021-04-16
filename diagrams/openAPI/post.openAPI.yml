@@ -1,0 +1,364 @@
+---
+openapi: 3.0.0
+info:
+  description: "Post Service API Specs"
+  version: 1.0.0
+  title: Pickly Post Service
+tags:
+  - name: posts
+    description: Posts endpoints
+paths:
+  /posts:
+    post:
+      tags:
+        - posts
+      summary: Create a new post
+      operationId: create
+      requestBody:
+        $ref: "#/components/requestBodies/createPost"
+      responses:
+        201:
+          description: Post Created Successfully
+          $ref: "#/components/responses/CreatedPost"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+    get:
+      tags:
+        - "posts"
+      summary: Get posts
+      operationId: get feed
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: number
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: The numbers of items to return
+      responses:
+        200:
+          description: Get all posts
+          $ref: "#/components/responses/getPosts"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+  /posts/{postid}:
+    get:
+      tags:
+        - "posts"
+      summary: Get one post
+      operationId: get one post
+      parameters:
+        - in: path
+          name: postid
+          required: true
+          schema:
+            type: number
+          description: id of post needed
+      responses:
+        200:
+          description: Get post with the provided id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getPost"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+    delete:
+      tags:
+        - "posts"
+      summary: Delete one post
+      operationId: Delete one post
+      parameters:
+        - in: path
+          name: postid
+          required: true
+          schema:
+            type: number
+          description: id of post needed
+      responses:
+        204:
+          description: Delete one post
+          $ref: "#/components/responses/deletePost"
+        404:
+          description: Not Found
+          $ref: "#/components/responses/NotFoundError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+  /votes/{optionid}:
+    put: 
+      tags:
+        - "votes"
+      summary: Add vote
+      operationId: Add vote
+      parameters:
+        - in: path
+          name: optionid
+          required: true
+          schema:
+            type: number
+          description: id of option
+      # requestBody:
+      #   $ref: "#/components/requestBodie/addVote"
+      responses:
+        200:
+          description: Add vote on option
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties: 
+                    votesCount: 
+                      type: number
+                    optionId: 
+                      type: string
+                
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedError"
+        409:
+          description: Conflict when user votes twice on same option
+          $ref: "#/components/responses/ConflictError"
+components:
+  schemas:
+    post:
+      type: object
+      properties:
+        caption:
+          type: string
+          example: "test caption"
+        isHidden:
+          type: boolean
+          example: false
+        type:
+          type: string
+          enum: [text, image, miniSurvey]
+          example: "text"
+        options:
+          type: object
+          oneOf:
+            - $ref: "#/components/schemas/postTextOptionsPOST"
+            - $ref: "#/components/schemas/postImageOptionsPOST"
+            - $ref: "#/components/schemas/postMiniSurveyOptionsPOST"
+      required: ["isHidden", "type"]
+    postTextOptionsPOST:
+      # type: object
+      # properties: 
+      #   options: 
+      #     type: array
+      #     items: 
+      #       type: object
+      #       properties:
+      #         optionBody: 
+      #           type: string
+        type: array
+        items: 
+          type: object
+          properties:
+            optionBody: 
+              type: string
+    postImageOptionsPOST:
+      type: array
+      items: 
+        type: object
+        properties:
+          file: 
+            type: string
+            format: binary
+
+    postMiniSurveyOptionsPOST:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              groupTitle:
+                type: string
+              textOptions:
+                $ref: "#/components/schemas/postTextOptionsPOST"
+    postTextOptionsGET:
+      type: array
+      items:
+        type: object
+        properties:
+          content:
+            type: string
+          voteCount:
+            type: number
+          optionId:
+            type: string
+    postImageOptionsGET:
+      type: array
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+          voteCount:
+            type: number
+          optionId:
+            type: string
+    postMiniSurveyOptionsGET:
+      type: object
+      properties:
+        image:
+          type: string
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
+              groupTitle:
+                type: string
+              textOptions:
+                $ref: "#/components/schemas/postTextOptionsGET"
+    getPost:
+      type: object
+      properties:
+        user: 
+          type: object
+          properties: 
+            id: 
+              type: string
+              example: "some-id"
+            name: 
+              type: string
+              example: "John Doe"
+            profilePic: 
+              type: string
+              example: "URL"
+        id:
+          type: string
+          example: "some-id"
+        caption:
+          type: string
+          example: "some-caption"
+        isHidden:
+          type: boolean
+          example: false
+        content:
+          type: object
+          oneOf:
+            - $ref: "#/components/schemas/postTextOptionsGET"
+            - $ref: "#/components/schemas/postImageOptionsGET"
+            - $ref: "#/components/schemas/postMiniSurveyOptionsGET"
+        createdAt: 
+          type: string
+          example: "13 May, 2020 UTC"
+      required:
+        ['createdAt', 'content', 'isHidden', 'id']
+    GenericError:
+      type: object
+      properties:
+        message:
+          type: array
+          items:
+            type: string
+          example: ["error1", "error2"]
+        statusCode:
+          type: number
+          default: 123
+  requestBodies:
+    createPost:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/post"
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+  responses:
+    CreatedPost:
+      description: Post created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "some-id"
+              imageUrls:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url: 
+                      type: string
+                    name: 
+                      type: string
+    getPosts:
+      description: Get posts
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              postsCount: 
+                type: number
+              posts: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/getPost"
+    deletePost:
+      description: Post deleted     
+    BadRequestError:
+      description: Bad Request Error occured
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    UnauthorizedError:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    ConflictError:
+      description: Conflict when user votes twice on same option.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    NotFoundError:
+      description: Not Found
+      content: 
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/GenericError"
+servers:
+  - description: Try it Now
+    url: https://pickly-posts-be-dev.m3ntorship.net/

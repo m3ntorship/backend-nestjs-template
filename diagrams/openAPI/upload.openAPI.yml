@@ -1,0 +1,116 @@
+---
+openapi: 3.0.0
+info:
+  description: "Upload Service API Specs"
+  version: 1.0.0
+  title: Pickly Upload Service
+tags:
+  - name: upload
+    description: upload endpoints
+paths:
+  /upload:
+    post:
+      tags:
+        - upload
+      summary: Upload file
+      operationId: upload
+      requestBody:
+        $ref: "#/components/requestBodies/uploadFile"
+      responses:
+        201:
+          description: File uploaded Successfully
+          $ref: "#/components/responses/UploadedFile"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+  
+components:
+  schemas:
+    UploadedFile:
+      type: object
+      properties:
+        filesCount: 
+          type: number
+        files:
+          type: array
+          items:
+            type: object
+            properties: 
+              name:
+                type: string
+              url:
+                type: string
+
+    UploadFile:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    GenericError:
+      type: object
+      properties:
+        message:
+          type: array
+          items:
+            type: string
+          example: ["error1", "error2"]
+        statusCode:
+          type: number
+          default: 123
+  requestBodies:
+    uploadFile:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/UploadFile"
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+  responses:
+    getFile:
+      description: Get file
+      content: 
+        image/*:
+          schema:
+            type: string
+            format: binary
+    UploadedFile:
+      description: Uploaded file
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UploadedFile"
+  
+    BadRequestError:
+      description: Bad Request Error occured
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    UnauthorizedError:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    NotFoundError:
+      description: Not Found
+      content: 
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/GenericError"
+servers:
+  - description: Try it Now
+    url: https://pickly-posts-be-dev.m3ntorship.net/

@@ -1,0 +1,56 @@
+@startuml
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Post" as post {
+    *id : number <<generated>>
+    --
+    *caption: text
+    *post_type: text
+    *isHidden: text
+    *user_id: number <<FK>>
+}
+
+entity "Media" as media {
+    *id : number <<generated>>
+    --
+    *post_id: number <<FK>>
+    *URL: text
+}
+
+entity "Group" as group {
+    *id : number <<generated>>
+    --
+    *post_id: number <<FK>>
+    *option_id: number <<FK>>
+    *group_number : number
+    *group_name : text
+}
+
+entity "Option" as option {
+    *id : number <<generated>>
+    --
+    *post_id: number <<FK>>
+    'content column is just text content of the text options
+    'images are requested from media service by post id
+    *content : text
+    *vote_count : number
+}
+
+entity "Vote" as vote {
+    *id : number <<generated>>
+    --
+    *option_id: number <<FK>>
+    *user_id: number <<FK>>
+}
+
+post ||..|{ option
+post ||..|{ media
+post ||..|{ group
+group ||..|{ option
+option ||..|{ vote
+
+@enduml

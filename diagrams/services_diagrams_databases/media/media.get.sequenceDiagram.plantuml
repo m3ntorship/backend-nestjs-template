@@ -1,0 +1,17 @@
+@startuml get media
+hide footbox
+
+
+actor enduser
+participant mediaService
+participant provider
+
+
+enduser -> mediaService: masked URL
+rnote over of mediaService : map masked URL \nwith original URL 
+mediaService -> provider: Request file
+provider -> mediaService: binary file
+mediaService -> enduser: binary file
+@enduml
+
+' Check when to send the success response in case of Binary files exist

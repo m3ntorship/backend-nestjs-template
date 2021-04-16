@@ -1,0 +1,18 @@
+@startuml
+hide footbox
+
+actor user
+
+participant postService
+participant mediaService
+participant provider
+
+user -> postService : Request Post
+postService -> user: Posts
+group Proxying
+user -> mediaService : Browser requests image blobs
+mediaService -> provider : Proxy image blobs from provider to the client
+provider -> mediaService : Original binary files
+mediaService -> user : Original binary files
+end
+@enduml

@@ -1,0 +1,30 @@
+@startuml general
+hide footbox
+
+actor frontEnd
+
+participant postService
+participant notificationService
+
+== create post ==
+frontEnd -> postService : Request to create post
+postService -> frontEnd: created post id + file url(s) (if found)
+
+== get post ==
+frontEnd -> postService : Request to get post
+postService -> frontEnd : post data
+
+== add vote ==
+frontEnd -> postService : Add vote
+postService -> frontEnd : options vote count
+postService -> notificationService : create notification
+
+== request notifications ==
+frontEnd -> notificationService : request notifications
+notificationService -> frontEnd : notifications
+
+== update notifications ==
+frontEnd -> notificationService : update notifications
+notificationService -> frontEnd : updated
+
+@enduml

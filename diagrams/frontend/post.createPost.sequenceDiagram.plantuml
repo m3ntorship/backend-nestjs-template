@@ -1,0 +1,17 @@
+@startuml create_post
+hide footbox
+
+actor user
+
+participant postService
+participant otherServices
+
+user -> postService : Request to create post
+alt Binary files exits
+postService -> otherServices: Binary files
+otherServices -> postService: file url(s)
+postService -> user: created post id + file url(s)
+else No binary files
+postService -> user: created post id
+end
+@enduml

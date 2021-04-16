@@ -1,0 +1,131 @@
+---
+openapi: 3.0.0
+info:
+  description: "Media Service API Specs"
+  version: 1.0.0
+  title: Pickly Media Service
+tags:
+  - name: media
+    description: media endpoints
+paths:
+  /media:
+    post:
+      tags:
+        - media
+      summary: Add file
+      operationId: create
+      requestBody:
+        $ref: "#/components/requestBodies/addFile"
+      responses:
+        201:
+          description: File Added Successfully
+          $ref: "#/components/responses/AddedFile"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+  /media/{fileURL}:  
+    get:
+      tags:
+        - media
+      summary: Get file
+      operationId: get
+      parameters:
+        - in: path
+          name: fileURL
+          required: true
+          schema:
+            type: number
+          description: url of file
+      responses:
+        200:
+          description: File retrieved successfully
+          $ref: "#/components/responses/getFile"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: File not found.
+          $ref: "#/components/responses/NotFoundError"
+components:
+  schemas:
+    AddedFile:
+      type: object
+      properties:
+        maskedURL:
+          type: string
+    AddFile:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+    GenericError:
+      type: object
+      properties:
+        message:
+          type: array
+          items:
+            type: string
+          example: ["error1", "error2"]
+        statusCode:
+          type: number
+          default: 123
+  requestBodies:
+    addFile:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/AddFile"
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+  responses:
+    getFile:
+      description: Get file
+      content: 
+        image/*:
+          schema:
+            type: string
+            format: binary
+    AddedFile:
+      description: Added file
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AddedFile"
+  
+    BadRequestError:
+      description: Bad Request Error occured
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    UnauthorizedError:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    NotFoundError:
+      description: Not Found
+      content: 
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/GenericError"
+servers:
+  - description: Try it Now
+    url: https://pickly-posts-be-dev.m3ntorship.net/

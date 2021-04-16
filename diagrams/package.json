@@ -1,0 +1,14 @@
+{
+  "name": "diagrams",
+  "version": "1.0.0",
+  "scripts": {
+    "compileOpenAPI": "markdown-swagger ../diagrams/openAPI/post.openAPI.yml ./Readme.md"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/seifeldeen3388/diagrams.git",
+  "author": "<amrakmal97@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "markdown-swagger": "^1.0.4"
+  }
+}

@@ -1,0 +1,19 @@
+@startuml
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Notifications" as notifications {
+    *id: number <<PK>>
+    --
+    *action: text
+    *state: text
+    *createdAt: text
+    *notifier: number <<FK>>
+    *notified: number <<FK>>
+    *entity: number <<FK>>
+}
+
+@enduml

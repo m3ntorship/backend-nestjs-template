@@ -1,0 +1,20 @@
+@startuml create_post
+hide footbox
+
+actor user
+
+participant postService
+participant mediaService
+participant uploadService
+
+user -> postService : Request to create post
+alt Binary files exits
+postService -> mediaService: Binary files
+mediaService -> uploadService: New binary files
+uploadService -> mediaService: Original URLs
+mediaService -> postService: Masked URLs
+postService -> user: created post id + imgurl(s)
+else No binary files
+postService -> user: created post id
+end
+@enduml

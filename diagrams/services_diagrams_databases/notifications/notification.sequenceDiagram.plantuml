@@ -1,0 +1,34 @@
+@startuml
+hide footbox
+
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+!pragma teoz true
+
+'To be made async in design
+box "Create notification" #LightBlue
+actor endUser
+participant client
+participant notificationService
+end box
+
+box "Get notification" #LightCyan
+actor user1
+participant notificationService1
+end box
+
+box "Update notification state" #LightPink
+actor user2
+participant notificationService2
+end box
+
+
+endUser -> client : Action that\ntriggers notification
+&user1 -> notificationService1 : Request notifications
+&user2 -> notificationService2 : Update notification
+client -> endUser : Success
+&notificationService1 -> user1 : Notifications
+&notificationService2 -> user2 : Success
+client -> notificationService: Create notification
+
+@enduml

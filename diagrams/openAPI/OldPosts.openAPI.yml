@@ -1,0 +1,448 @@
+---
+openapi: 3.0.0
+info:
+  description: "Post Service API Specs
+
+    "
+  version: 1.0.0
+  title: Pickly Post Service
+tags:
+  - name: posts
+    description: Posts endpoints
+  - name: votes
+    description: voting endpoint
+paths:
+  "/posts":
+    post:
+      tags:
+        - posts
+      summary: Create a new post
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                isHidden:
+                  type: boolean
+                type:
+                  type: string
+                  enum: [text, image, miniSurvey]
+                textOptions:
+                  type: array
+                  items:
+                    type: string
+                imageOptions:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                miniSurveyOptions:
+                  type: object
+                  properties:
+                    image:
+                      type: string
+                      format: binary
+                    groups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          groupTitle:
+                            type: string
+                          textOptions:
+                            type: array
+                            items:
+                              type: string
+              required: ["isHidden", "type"]
+      responses:
+        "201":
+          description: Post Created Successfully
+        "400":
+          description: Bad request
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+          # ToBeAsked: Add different error responses
+
+    get:
+      tags:
+        - posts
+      summary: get All posts for feed.
+      description: |
+        posts owned by user are different
+        from ones that aren't,
+        posts owned by user will always have their votes.
+        non-owners only get votes when they have already voted.
+
+        In the example, both objects are shown.
+      parameters:
+        - name: limit
+          in: query
+          description: posts per page
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: page number
+          schema:
+            type: integer
+      operationId: getPosts
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    If-Post-Owner:
+                      type: object
+                      "$ref": "#/components/schemas/Post-Owner"
+                    If-Post-NotOwner:
+                      type: object
+                      "$ref": "#/components/schemas/Post-NotOwner"
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+  "/posts/{postId}":
+    get:
+      tags:
+        - posts
+      summary: "get post by id.
+
+        "
+      description: |
+        posts owned by user are different
+        from ones that aren't,
+        posts owned by user will always have their votes.
+        non-owners only get votes when they have already voted.
+
+        In the example, both objects are shown.
+      operationId: getPost
+      parameters:
+        - name: postId
+          in: path
+          description: Get a single post by its Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Fetched Post successfuly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  If-Post-Owner:
+                    type: object
+                    "$ref": "#/components/schemas/Post-Owner"
+                  If-Post-NotOwner:
+                    type: object
+                    "$ref": "#/components/schemas/Post-NotOwner"
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+        "404":
+          description: Post Not Found
+    delete:
+      tags:
+        - posts
+      summary: Deletes a post
+      operationId: delete
+      parameters:
+        - name: postId
+          in: path
+          description: Post id to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: no content
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+  "/users/{userId}/posts":
+    get:
+      tags:
+        - users
+      summary: Get posts by a certain user
+      operationId: getUserPosts
+      parameters:
+        - name: userId
+          in: path
+          description: get all posts of user by user id
+          required: true
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Bad request
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+  "/votes/{imageId}":
+    post:
+      tags:
+        - votes
+      summary: vote / upvote / downvote an option
+      description: vote / upvote / downvote an option
+      operationId: vote
+      parameters:
+        - name: imageId
+          in: path
+          description: vote / upvote / downvote an option
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flag:
+                  type: integer
+      responses:
+        "200":
+          description: vote was successfully made
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  votes:
+                    type: integer
+                    example: 12
+                  upvotes:
+                    type: integer
+                    example: 9
+        "400":
+          description: |
+            user has already voted in this post
+            or a user is trying to upvote his own post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  If-Already-Voted:
+                    type: object
+                    properties:
+                      success:
+                        example: false
+                      error:
+                        example: Already Voted
+                  If-OwnedByCurrentUser:
+                    type: object
+                    properties:
+                      success:
+                        example: false
+                      error:
+                        example: You cannot vote your own post
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+  "/feedbacks":
+    post:
+      tags:
+        - feedbacks
+      summary: Add a new feedback to the database
+      operationId: addFeedback
+      responses:
+        "201":
+          "$ref": "#/components/responses/SuccessfulFeedback"
+        "400":
+          "$ref": "#/components/responses/BadRequestError"
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+        "429":
+          "$ref": "#/components/responses/TooManyRequestsError"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Feedback"
+        description: Updated user object
+        required: true
+    get:
+      tags:
+        - feedbacks
+      summary: Get all feedbacks
+      operationId: getFeedbacks
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Feedback"
+        "401":
+          "$ref": "#/components/responses/UnauthorizedError"
+  "/feedbacks/categories":
+    get:
+      tags:
+        - feedbacks
+      summary: Get all categories from database
+      operationId: getCategories
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Category"
+components:
+  schemas:
+    Post-Owner:
+      type: object
+      required:
+        - caption
+        - resources
+        - isAnonymous
+      properties:
+        caption:
+          type: string
+        resources:
+          "$ref": "#/components/schemas/Resource-Owner"
+        isAnonymous:
+          type: boolean
+        author:
+          "$ref": "#/components/schemas/Author"
+        ownedByCurrentUser:
+          type: boolean
+          example: true
+    Post-NotOwner:
+      type: object
+      required:
+        - caption
+        - resources
+        - isAnonymous
+      properties:
+        caption:
+          type: string
+        resources:
+          "$ref": "#/components/schemas/Resource-NotOwner"
+        isAnonymous:
+          type: boolean
+          example: false
+        author:
+          "$ref": "#/components/schemas/Author"
+        voted:
+          type: boolean
+        ownedByCurrentUser:
+          type: boolean
+          example: false
+    Resource-Owner:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image-Owner"
+    Resource-NotOwner:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image-NotOwner"
+    Image-Owner:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        provider:
+          type: string
+        votes:
+          "$ref": "#/components/schemas/Vote"
+    Image-NotOwner:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        provider:
+          type: string
+        votes:
+          "$ref": "#/components/schemas/Vote"
+        votedByUser:
+          type: boolean
+    Vote:
+      type: object
+      properties:
+        count:
+          type: integer
+          default: 0
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    Feedback:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+            - Front end
+            - Back end
+            - UI/UX
+        body:
+          type: string
+          minLength: 50
+          maxLength: 500
+    Category:
+      type: object
+      properties:
+        title:
+          type: string
+    Report:
+      type: object
+      properties:
+        resourceId:
+          type: string
+          example: 5fb9340dabba0c7e62f619a4
+        reporterId:
+          type: string
+          example: 5fb9340dabba0c7e62f619a4
+        type:
+          type: string
+          example: post
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+  responses:
+    SuccessfulFeedback:
+      description: Post created successfully
+    BadRequestError:
+      description: Bad Request Error occured
+    UnauthorizedError:
+      description: Unauthorized. Access token is missing or invalid
+    TooManyRequestsError:
+      description: Too many requests are being made
+servers:
+  - description: Try it Now
+    url: https://pickly-posts-be-dev.m3ntorship.net/

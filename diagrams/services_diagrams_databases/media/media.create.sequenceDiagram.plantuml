@@ -1,0 +1,18 @@
+@startuml create media
+hide footbox
+
+
+participant client
+participant mediaService
+participant uploadService
+
+
+client -> mediaService: Binary files
+mediaService -> mediaService: manipulation 
+mediaService -> uploadService: New binary files
+uploadService -> mediaService: Original URLs
+mediaService -> mediaService: Masking
+mediaService -> client: Masked URLs
+@enduml
+
+' Check when to send the success response in case of Binary files exist

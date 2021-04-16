@@ -1,0 +1,23 @@
+@startuml
+hide footbox
+
+participant client
+participant mediaService
+participant uploadService
+participant provider1 #Yellow
+participant provider2 #Blue
+participant providerN #Green
+
+client -> mediaService : Request upload
+mediaService -> uploadService : Binary File
+uploadService [#Yellow]-> provider1: Upload Request1
+uploadService [#Blue]-> provider2: Upload Request2
+uploadService [#Green]-> providerN: Upload Request3
+
+providerN [#Green]-> uploadService : Upload Response3 (Fastest response)
+uploadService -> mediaService : URL (Fastest respone)
+mediaService -> client : Masked URL (Fastest respone)
+provider2 [#Blue]-> uploadService : Upload Response2
+provider1 [#Yellow]-> uploadService : Upload Response1
+
+@enduml

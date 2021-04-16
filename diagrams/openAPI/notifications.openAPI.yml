@@ -1,0 +1,196 @@
+---
+openapi: 3.0.0
+info:
+  description: "Notification Service API Specs"
+  version: 1.0.0
+  title: Pickly Notification Service
+tags:
+  - name: notifications
+    description: Notifications endpoints
+paths:
+  /notifications:
+    post:
+      tags:
+        - notifications
+      summary: Create a new notification
+      operationId: create
+      requestBody:
+        $ref: "#/components/requestBodies/createNotification"
+      responses:
+        201:
+          description: Notification Created Successfully
+          $ref: "#/components/responses/CreatedNotification"
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: Not Found
+          $ref: "#/components/responses/NotFoundError"
+  /notifications/:
+    get:
+      tags:
+        - "notifications"
+      summary: Get notifications
+      operationId: get notifications
+      responses:
+        200:
+          description: Get notifications
+          $ref: "#/components/responses/getNotifications"
+        401:
+          description: Unauthorized.
+          $ref: "#/components/responses/UnauthorizedError"
+  /notifications/{notificationid}:
+    patch: 
+      tags:
+        - "notifications"
+      summary: Update notification
+      operationId: Update notification
+      parameters:
+        - in: path
+          name: notificationid
+          required: true
+          schema:
+            type: number
+          description: id of notification
+      requestBody:
+        $ref: "#/components/requestBodies/updateNotification"
+      responses:
+        200:
+          description: updated notification
+        400:
+          description: Bad request
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedError"
+components:
+  schemas:
+    createNotification:
+      type: object
+      properties:
+        notified_id: 
+          type: number
+        action: 
+          type: string
+          enum:
+            - vote
+        entity:
+          type: number
+    getNotification:
+      type: object
+      properties:
+        notificationId: 
+          type: string
+        action:
+          type: string
+          enum:
+            - vote
+        state:
+          type: string
+          enum: 
+            - unread
+            - read
+        notifier:
+          type: object
+          properties: 
+            id: 
+              type: number
+            profilePic: 
+              type: string
+            name: 
+              type: string
+        created_at:
+          type: string
+        entity: 
+          type: object
+          properties:
+            id: 
+              type: number
+            type:
+              type: string
+              enum:
+                - post
+            details:
+              type: object
+              properties:
+                description:
+                  type: string
+    GenericError:
+      type: object
+      properties:
+        message:
+          type: array
+          items:
+            type: string
+          example: ["error1", "error2"]
+        statusCode:
+          type: number
+          default: 123
+  requestBodies:
+    createNotification:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/createNotification"
+    updateNotification:
+      content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state: 
+                  type: string
+                  enum:
+                    - unread
+                    - read
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+  responses:
+    CreatedNotification:
+      description: Notification created successfully
+    getNotifications:
+      description: Get notification
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              notificationsCount: 
+                type: number
+              notification: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/getNotification"
+    BadRequestError:
+      description: Bad Request Error occured
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    UnauthorizedError:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GenericError"
+    NotFoundError:
+      description: Not Found
+      content: 
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/GenericError"
+servers:
+  - description: Try it Now
+    url: https://pickly-posts-be-dev.m3ntorship.net/

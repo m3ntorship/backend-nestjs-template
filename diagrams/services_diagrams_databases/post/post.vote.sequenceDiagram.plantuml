@@ -1,0 +1,15 @@
+@startuml
+hide footbox
+
+actor endUser
+
+participant postService
+participant notificationService
+
+endUser -> postService : Add vote
+
+' To be made async in design
+postService -> endUser : Success
+postService -> notificationService: Create notification
+
+@enduml
