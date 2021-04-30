@@ -63,3 +63,5 @@ jobs:
           context: .
           tags: m3ntorshipci/pickify-posts:${{ needs.prepare.outputs.version }}
           file: Dockerfile
+          push: true
+
