@@ -11,13 +11,14 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: output sha
         id: sha
         run: echo "::set-output name=sha::$(git rev-parse HEAD)"
 
       - name: output version
         id: version
-        run: echo "::set-output name=sha_short::$(git rev-parse --short=4 HEAD)"
+        run: echo "::set-output name=version::$(git rev-parse --short=4 HEAD)"
 
     outputs:
       sha: ${{steps.sha.outputs.sha}}
