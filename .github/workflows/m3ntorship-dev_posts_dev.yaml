@@ -23,6 +23,15 @@ jobs:
       sha: ${{steps.sha.outputs.sha}}
       version: ${{steps.version.outputs.version}}
 
+  check-outputs:
+    needs:
+      - prepare
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "sha ${{ needs.prepare.outputs.sha }}"
+          echo "version ${{ needs.prepare.outputs.version }}"
+
   build-and-push-image:
     needs:
       - prepare
