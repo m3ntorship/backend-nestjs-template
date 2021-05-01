@@ -9,7 +9,7 @@ paths:
     get:
       tags:
         - "health"
-      summary: Health Check Summary
+      summary: Health Check
       operationId: healthCheck
       responses:
         200:
