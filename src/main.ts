@@ -10,7 +10,7 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
 import { winstonLoggerOptions } from './logging/winston.options';
 import { LoggingInterceptor } from './logging/logging.interceptor';
-import * as swaggerDocument from '../post.openAPI.json';
+import * as swaggerDocument from '../example.openapi.json';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
