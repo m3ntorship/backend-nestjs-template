@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pickify-template-mock-dep
+  namespace: {{{M3_NAMESPACE}}}
+  labels:
+    app: pickify-template-mock-dep
+spec:
+  replicas: {{{M3_REPLICAS}}}
+  selector:
+    matchLabels:
+      app: pickify-template-mock-pod
+  template:
+    metadata:
+      labels:
+        app: pickify-template-mock-pod
+    spec:
+      containers:
+        - name: pickify-template-mock-container
+          image: "{{{M3_IMAGE}}}:{{{M3_VERSION}}}"
+          ports:
+            - name: web
+              containerPort: {{{M3_CONTAINER_PORT}}}
+              protocol: TCP

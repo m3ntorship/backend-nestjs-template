@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pickify-template-mock-service
+  namespace: {{{M3_NAMESPACE}}}
+spec:
+  selector:
+    app: pickify-template-mock-pod
+  ports:
+    - name: pickify-template-mock-container
+      protocol: TCP
+      port: 80
+      targetPort: {{{M3_CONTAINER_PORT}}}

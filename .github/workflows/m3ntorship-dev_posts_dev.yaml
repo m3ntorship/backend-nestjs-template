@@ -89,4 +89,21 @@ jobs:
           sudo mv mo /usr/local/bin/
           echo "works" | mo
       
-      
+      - name: deploy-dev
+        env:
+          DEPLOYMENT_PATH: deploy
+          TEMP_DIR: temp
+          VERSION: ${{ needs.prepare.outputs.version }}
+          M3_NAMESPACE: pickify
+          M3_REPLICAS: '1'
+          M3_VERSION: latest
+          M3_IMAGE: m3ntorshipci/prism
+          M3_PORT_MOCK_BACKEND: '80'
+          M3_CONTAINER_PORT: 4010
+          M3_HOST_NAME: ahmedayoub.me
+          M3_TEMPLATE_MOCK_DNS_VALUE: mock-template
+        run: |
+          echo $VERSION
+          mkdir -p $TEMP_DIR
+          for f in $DEPLOYMENT_PATH/*; do mo -u "$f" > $TEMP_DIR/"$(basename $f)"; done
+          kubectl apply -f $TEMP_DIR

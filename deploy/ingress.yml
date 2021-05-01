@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pickify-template-mock-service-ingress
+  namespace: {{{M3_NAMESPACE}}}
+spec:
+  rules:
+    - host: '{{{M3_TEMPLATE_MOCK_DNS_VALUE}}}.{{{M3_HOST_NAME}}}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pickify-posts
+                port:
+                  number: {{{M3_PORT_MOCK_BACKEND}}}
