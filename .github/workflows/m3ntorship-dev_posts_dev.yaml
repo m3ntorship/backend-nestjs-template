@@ -78,9 +78,10 @@ jobs:
 
       - name: Configure k8s
         shell: bash
+
         run: |
           mkdir -p ~/.kube
-          echo ${{secrets.KUBE_CONFIG_TEMP}} | base64 -d -i > ~/.kube/config
+          echo "${{secrets.KUBE_CONFIG_TEMP}}" | base64 -d -i > ~/.kube/config
         
       - name: install moustache
         run: |
