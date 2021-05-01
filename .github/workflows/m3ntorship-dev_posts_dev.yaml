@@ -65,3 +65,28 @@ jobs:
           file: Dockerfile
           push: true
 
+  deploy:
+    needs:
+      - prepare
+      - build-and-push-image
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/setup-kubectl@v1
+
+      - name: Configure k8s
+        shell: bash
+        run: |
+          mkdir -p ~/.kube
+          echo ${{secrets.KUBE_CONFIG_TEMP}} | base64 -d -i > ~/.kube/config
+        
+      - name: install moustache
+        run: |
+          curl -sSL https://git.io/get-mo -o mo
+          chmod +x mo
+          sudo mv mo /usr/local/bin/
+          echo "works" | mo
+      
+      
