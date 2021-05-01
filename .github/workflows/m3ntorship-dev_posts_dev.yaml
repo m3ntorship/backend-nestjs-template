@@ -1,7 +1,7 @@
 on: 
   push:
     paths:
-      - "./openapi/example.openapi.yaml"
+      - "./openapi/example.openapi.yml"
       - "example.openapi.json"
 
 jobs:
