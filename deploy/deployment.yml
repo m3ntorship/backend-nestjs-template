@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: pickify-template-mock-container
-          image: "{{{M3_IMAGE}}}:{{{M3_VERSION}}}"
+          image: "{{{M3_MOCKING_SERVICE_DOCKER_REPOSITORY}}}:{{{M3_VERSION}}}"
           ports:
             - name: web
               containerPort: {{{M3_CONTAINER_PORT}}}

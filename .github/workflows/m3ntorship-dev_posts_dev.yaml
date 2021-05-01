@@ -1,11 +1,8 @@
-on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - synchronize
-      - opened
-      - edited
+on: 
+  push:
+    paths:
+      - "./openapi/example.openapi.yaml"
+      - "example.openapi.json"
 
 jobs:
   prepare:
@@ -61,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: m3ntorshipci/pickify-posts:${{ needs.prepare.outputs.version }}
+          tags: m3ntorshipci/pickify-template:${{ needs.prepare.outputs.version }}
           file: Dockerfile
           push: true
 
@@ -98,7 +95,7 @@ jobs:
           M3_NAMESPACE: pickify
           M3_REPLICAS: '1'
           M3_VERSION: latest
-          M3_IMAGE: m3ntorshipci/prism
+          M3_MOCKING_SERVICE_DOCKER_REPOSITORY: m3ntorshipci/prism
           M3_PORT_MOCK_BACKEND: '80'
           M3_CONTAINER_PORT: 4010
           M3_HOST_NAME: ahmedayoub.me
