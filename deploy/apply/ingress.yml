@@ -5,23 +5,23 @@ metadata:
   namespace: {{{M3_NAMESPACE}}}
 spec:
   rules:
-    - host: '{{{M3_DNS_VALUE}}}.{{{M3_HOST_NAME}}}'
+    - host: '{{{M3_PROJECT}}}-{{{M3_COMPONENT}}}-{{{M3_ENVIRONMENT}}}.{{{M3_HOST_NAME}}}'
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: "{{{M3_COMPONENET}}}-service"
+                name: "{{{M3_COMPONENT}}}-service"
                 port:
                   number: {{{M3_PORT_BACKEND}}}
-    - host: '{{{M3_DNS_VALUE}}}-mock.{{{M3_HOST_NAME}}}'
+    - host: '{{{M3_PROJECT}}}-{{{M3_COMPONENT}}}-{{{M3_ENVIRONMENT}}}-mock.{{{M3_HOST_NAME}}}'
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: "{{{M3_COMPONENET}}}-service"
+                name: "{{{M3_COMPONENT}}}-service"
                 port:
                   number: {{{M3_PORT_BACKEND_MOCK}}}
