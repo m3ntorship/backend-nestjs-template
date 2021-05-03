@@ -11,7 +11,7 @@ on:
 
 env:
   M3_PROJECT: pickify
-  M3_COMPONENET: template
+  M3_COMPONENT: template
   M3_ENVIRONMENT: 'pr-${{ github.event.number }}'
   M3_VERSION: 'pr-${{ github.event.number }}-${{ github.run_number}}'
   M3_NAMESPACE: '${{github.event.organization.login}}-${{github.event.repository.name}}-pr-${{ github.event.number }}'
@@ -118,7 +118,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           msg: |
-            Check out this commit here: test-${{github.event.number}}-pr.pickify.net
+            Check out this commit here: 
+            ${{env.M3_COMPONENT}}: ${{env.M3_PROJECT}}-${{env.M3_COMPONENT}}-${{env.M3_ENVIRONMENT}}.${{env.M3_HOST_NAME}}
+            ${{env.M3_COMPONENT}} mock: ${{env.M3_PROJECT}}-${{env.M3_COMPONENT}}-${{env.M3_ENVIRONMENT}}-mock.${{env.M3_HOST_NAME}}
 
   undeploy-pr:
     if: ${{github.event.action == 'closed'}}
