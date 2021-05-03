@@ -139,17 +139,17 @@ jobs:
   cleanup_docker_tags:
     if: ${{github.event.action == 'closed'}}
     needs:
-      - undeploy-pr
-
+      - undeploy_pr
     runs-on: ubuntu-latest
     steps:
       - id: delete_old_tags
         name: Delete old docker image tags
         uses: m3ntorship/action-dockerhub-cleanup@1.2
         with:
-          token: ${{secrets.DOCKER_HUB_TOKEN}}
-          user: 'saifaldin3388'
-          repos: '["someapp"]'
+          token: ${{secrets.DOCKER_HUB_M3NTORSHIPCI_TOKEN}}
+          user: 'm3ntorshipci'
+          repos: '["pickly-posts"]'
           keep-last: 0
           force-full-cleanup: true
           substrings: '["pr-${{ github.event.number }}"]'
+
