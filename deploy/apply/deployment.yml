@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{{M3_COMPONENET}}}-deployment"
+  name: "{{{M3_COMPONENT}}}-deployment"
   namespace: {{{M3_NAMESPACE}}}
   labels:
-    app: "{{{M3_COMPONENET}}}-deployment"
+    app: "{{{M3_COMPONENT}}}-deployment"
 spec:
   replicas: {{{M3_REPLICAS}}}
   selector:
     matchLabels:
-      app: {{{M3_COMPONENET}}}
+      app: {{{M3_COMPONENT}}}
   template:
     metadata:
       labels:
-        app: {{{M3_COMPONENET}}}
+        app: {{{M3_COMPONENT}}}
     spec:
       containers:
-        - name: "{{{M3_COMPONENET}}}-main-container"
+        - name: "{{{M3_COMPONENT}}}-main-container"
           image: "{{{M3_IMAGE}}}:{{{M3_VERSION}}}"
           env:
             - name: DB_URL
@@ -26,7 +26,7 @@ spec:
               containerPort: 3000
               protocol: TCP
               
-        - name: "{{{M3_COMPONENET}}}-mock-container"
+        - name: "{{{M3_COMPONENT}}}-mock-container"
           image: "{{{M3_MOCK_IMAGE}}}"
           args:
             [
