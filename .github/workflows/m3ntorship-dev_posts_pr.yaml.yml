@@ -141,7 +141,7 @@ jobs:
   cleanup_docker_tags:
     if: ${{github.event.action == 'closed'}}
     needs:
-      - undeploy_pr
+      - undeploy-pr
     runs-on: ubuntu-latest
     steps:
       - id: delete_old_tags
