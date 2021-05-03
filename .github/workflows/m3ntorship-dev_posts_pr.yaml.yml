@@ -23,7 +23,7 @@ env:
   M3_PORT_BACKEND: 80
   M3_PORT_BACKEND_MOCK: 81
   M3_DOCKER_FILE: Dockerfile
-  M3_IMAGE: m3ntorship/service-template
+  M3_IMAGE: m3ntorshipci/service-template
   M3_MOCK_IMAGE: m3ntorshipci/prism:latest
   M3_HOST_NAME: pickify.net
   M3_ELEPHANTSQL_URL: ${{secrets.ELEPHANTSQL_URL}}
