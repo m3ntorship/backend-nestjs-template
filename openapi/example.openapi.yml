@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: "Example API"
+tags:
+  - name: health
+paths:
+  /health:
+    get:
+      tags:
+        - "health"
+      summary: Health Check Summary
+      operationId: healthCheck
+      responses:
+        200:
+          description: Get all posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    x-faker: random.boolean
