@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{{M3_COMPONENT}}}-deployment"
+  namespace: {{{M3_NAMESPACE}}}
+  labels:
+    app: "{{{M3_COMPONENT}}}-deployment"
+spec:
+  replicas: {{{M3_REPLICAS}}}
+  selector:
+    matchLabels:
+      app: {{{M3_COMPONENT}}}
+  template:
+    metadata:
+      labels:
+        app: {{{M3_COMPONENT}}}
+    spec:
+      containers:
+        - name: "{{{M3_COMPONENT}}}-main-container"
+          image: "{{{M3_IMAGE}}}:{{{M3_VERSION}}}"
+          env:
+            - name: DB_URL
+              value: {{{M3_ELEPHANTSQL_URL}}}
+          ports:
+            - name: web
+              containerPort: 3000
+              protocol: TCP
+              
+        - name: "{{{M3_COMPONENT}}}-mock-container"
+          image: "{{{M3_MOCK_IMAGE}}}"
+          args:
+            [
+              'mock',
+              '-d',
+              '-h',
+              '0.0.0.0',
+              {{{M3_SERVICE_OPENAPI_SPECIFICATION}}},
+            ]
+          ports:
+            - name: web
+              containerPort: 4010
+              protocol: TCP

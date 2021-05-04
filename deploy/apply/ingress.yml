@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{{M3_PROJECT}}}
+  namespace: {{{M3_NAMESPACE}}}
+spec:
+  rules:
+    - host: '{{{M3_PROJECT}}}-{{{M3_COMPONENT}}}-{{{M3_ENVIRONMENT}}}.{{{M3_HOST_NAME}}}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{{M3_COMPONENT}}}-service"
+                port:
+                  number: {{{M3_PORT_BACKEND}}}
+    - host: '{{{M3_PROJECT}}}-{{{M3_COMPONENT}}}-{{{M3_ENVIRONMENT}}}-mock.{{{M3_HOST_NAME}}}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{{M3_COMPONENT}}}-service"
+                port:
+                  number: {{{M3_PORT_BACKEND_MOCK}}}

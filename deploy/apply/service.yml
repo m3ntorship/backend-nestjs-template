@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{{M3_COMPONENT}}}-service"
+  namespace: {{{M3_NAMESPACE}}}
+spec:
+  selector:
+    app: {{{M3_COMPONENT}}}
+  ports:
+    - name: "{{{M3_COMPONENT}}}-main-port"
+      protocol: TCP
+      port: {{{M3_PORT_BACKEND}}}
+      targetPort: {{{M3_MAIN_APP_PORT}}}
+    - name: "{{{M3_COMPONENT}}}-mock-port"
+      protocol: TCP
+      port: {{{M3_PORT_BACKEND_MOCK}}}
+      targetPort: {{{M3_MOCK_APP_PORT}}}
