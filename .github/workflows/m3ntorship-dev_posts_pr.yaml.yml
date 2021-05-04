@@ -136,7 +136,7 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG_DEV }}" | base64 -d -i > ~/.kube/config
 
       - name: delete pr namespace
-        run: kubectl delete namespace pr-${{github.event.number}}
+        run: kubectl delete namespace ${{env.M3_NAMESPACE}} --ignore-not-found
 
   cleanup_docker_tags:
     if: ${{github.event.action == 'closed'}}
