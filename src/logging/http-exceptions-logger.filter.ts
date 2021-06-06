@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Logger } from 'winston';
-import { formatISO } from 'date-fns';
+import { getNow } from '../shared/utils/datetime';
 
 @Catch()
 export class AllExceptionsFilterLogger implements ExceptionFilter {
@@ -27,7 +27,7 @@ export class AllExceptionsFilterLogger implements ExceptionFilter {
         originalUrl,
       },
       stack,
-      timestamp: formatISO(Date.now()),
+      timestamp: getNow(),
     });
 
     const status =
