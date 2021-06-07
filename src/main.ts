@@ -5,12 +5,10 @@ import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-import * as swaggerUi from 'swagger-ui-express';
 import { AppModule } from './app.module';
 import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
 import { winstonLoggerOptions } from './logging/winston.options';
 import { LoggingInterceptor } from './logging/logging.interceptor';
-import * as swaggerDocument from '../example.openAPI.json';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -43,8 +41,6 @@ async function bootstrap() {
   app.use('/health', (req: any, res: any, next: any) => {
     res.send({ status: true });
   });
-
-  app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   const configService = app.get(ConfigService);
   const port = configService.get('port');
