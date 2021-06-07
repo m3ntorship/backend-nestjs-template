@@ -7,7 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as swaggerUi from 'swagger-ui-express';
 import { AppModule } from './app.module';
-import { AllExceptionsFilterLogger } from './logging/http-exceptions-logger.filter';
+import { AllExceptionsFilterLogger } from './shared/exception-filters/http-exceptions-logger.filter';
 import { winstonLoggerOptions } from './logging/winston.options';
 import { LoggingInterceptor } from './logging/logging.interceptor';
 import * as swaggerDocument from '../example.openAPI.json';
