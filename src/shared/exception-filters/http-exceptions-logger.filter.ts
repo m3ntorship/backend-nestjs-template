@@ -5,8 +5,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import generateErrorBasedOnCurrentEnvironment from '../utils/Logging/generateErrorBasedOnEnvironment';
 import { Logger } from 'winston';
-import { formatISO } from 'date-fns';
+import { getNow } from '../utils/datetime';
 
 @Catch()
 export class AllExceptionsFilterLogger implements ExceptionFilter {
@@ -15,19 +16,18 @@ export class AllExceptionsFilterLogger implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const { headers, method, originalUrl, url } = ctx.getRequest();
+    const { headers, method, originalUrl } = ctx.getRequest();
     delete headers.authorization;
     const { message, stack } = exception;
 
     this.logger.error({
-      message,
+      ...exception,
       request: {
         headers,
         method,
         originalUrl,
       },
-      stack,
-      timestamp: formatISO(Date.now()),
+      timestamp: getNow(),
     });
 
     const status =
@@ -35,12 +35,13 @@ export class AllExceptionsFilterLogger implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(status).json({
-      statusCode: status,
-      message: message,
+    const errorToBeReturned = generateErrorBasedOnCurrentEnvironment(
+      status,
+      message,
       stack,
-      timestamp: formatISO(Date.now()),
-      path: url,
-    });
+      process.env.NODE_ENV,
+    );
+
+    response.status(status).json(errorToBeReturned);
   }
 }

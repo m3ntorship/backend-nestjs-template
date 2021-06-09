@@ -42,7 +42,7 @@
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "csurf": "^1.11.0",
-    "date-fns": "^2.19.0",
+    "dayjs": "^1.10.5",
     "express-rate-limit": "^5.2.6",
     "helmet": "^4.4.1",
     "passport": "^0.4.1",

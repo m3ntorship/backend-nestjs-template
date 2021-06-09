@@ -7,7 +7,7 @@ import {
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Logger } from 'winston';
-import { formatISO, differenceInMilliseconds } from 'date-fns';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -16,18 +16,18 @@ export class LoggingInterceptor implements NestInterceptor {
     const httpContext = context.switchToHttp();
     const { headers, method, originalUrl } = httpContext.getRequest();
     delete headers.authorization;
-    const start = Date.now();
+    const start = dayjs();
     return next.handle().pipe(
       tap(() => {
-        const end = Date.now();
+        const end = dayjs();
         this.logger.info({
           request: {
             headers,
             method,
             originalUrl,
           },
-          timestamp: formatISO(start),
-          responseTime: differenceInMilliseconds(end, start),
+          timestamp: dayjs(start).format(),
+          responseTime: end.diff(start),
         });
       }),
     );

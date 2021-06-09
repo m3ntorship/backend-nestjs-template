@@ -21,6 +21,8 @@ spec:
           env:
             - name: DB_URL
               value: {{{M3_ELEPHANTSQL_URL}}}
+            - name: NODE_ENV
+              value: {{{M3_NODE_ENV}}}
           ports:
             - name: web
               containerPort: 3000
