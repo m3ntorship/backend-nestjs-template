@@ -90,7 +90,7 @@ DB_PORT = 5432
 DB_USERNAME = postgres
 DB_PASSWORD = postgres
 DB_DATABASE = postgresql_database
-DB_ENTITIES = ["dist/**/*.entity.{ts,js}"]
+DB_ENTITIES = "dist/**/*.entity.{ts,js}"
 ```
 
 ### Services URL's
