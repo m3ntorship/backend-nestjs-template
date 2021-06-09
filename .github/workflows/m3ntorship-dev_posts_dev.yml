@@ -22,6 +22,7 @@ env:
   M3_HOST_NAME: pickify.net
   M3_ELEPHANTSQL_URL: ${{secrets.ELEPHANTSQL_URL}}
   M3_SERVICE_OPENAPI_SPECIFICATION: https://raw.githubusercontent.com/m3ntorship/backend-nestjs-template/main/openapi/example.openapi.yml
+  M3_NODE_ENV: production
   
 jobs:
   prepare:
@@ -87,7 +88,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG_TEMP }}" | base64 -d -i > ~/.kube/config
+          echo "${{ secrets.KUBE_CONFIG_DEV }}" | base64 -d -i > ~/.kube/config
 
       - name: install moustache
         run: |
